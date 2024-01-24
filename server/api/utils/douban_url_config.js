@@ -1,0 +1,15 @@
+export default {
+  hot_gaia: '/movie/hot_gaia',
+  tv_hot: '/subject_collection/tv_hot/items',
+  tv_domestic: '/subject_collection/tv_domestic/items',
+  tv_american: '/subject_collection/tv_american/items',
+  tv_japanese: '/subject_collection/tv_japanese/items',
+  tv_korean: '/subject_collection/tv_korean/items',
+  tv_animation: '/subject_collection/tv_animation/items',
+  show_hot: '/subject_collection/show_hot/items',
+  tag_movie: '/movie/tag',
+  movie_top250: '/subject_collection/movie_top250/items',
+  movie_rank: '/movie/category_ranks',
+  tv_rank: '/tv/category_ranks',
+  play_list: '/skynet/new_playlists',
+};
