@@ -4,6 +4,9 @@
 
 界面清爽，完全免费的在线观影网站。
 
+![image](https://github.com/liujuntao123/one-site-movie/assets/22583601/22b742e0-7b19-4a94-92a7-6a3b1f4ff0fd)
+
+
 ## 如何使用
 1. 拥有一个阿里云盘账号
 2. 前往设置页面设置token
