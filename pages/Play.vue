@@ -190,7 +190,7 @@ const handlePlay = async (url) => {
   });
   loadingPlayData.value = false;
 
-  if (data.value.status !== 'success') {
+  if (data.value && data.value.status !== 'success') {
     message.error('播放失败，请稍后再试');
     return;
   }
