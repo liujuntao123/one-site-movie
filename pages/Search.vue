@@ -6,7 +6,9 @@
         <SearchComp v-model:value="keywords" @onSearch="onSearch" />
       </div>
       <div>
-        <search-content :movieList="movieList"></search-content>
+        <a-spin :spinning="loading" style="min-height: 600px">
+          <search-content :movieList="movieList"></search-content>
+        </a-spin>
       </div>
     </div>
   </div>
@@ -30,8 +32,11 @@ const onSearch = () => {
   }
 };
 
+const loading = ref(false);
 const handleFetchData = async () => {
+  loading.value = true;
   const { data } = await useFetchWithEngine('/api/search', { query: { keywords: query.value.keywords } });
+  loading.value = false;
 
   if (data.value && data.value.status === 'success') {
     movieList.value = data.value.data.list.filter((item) => item.vod_id.includes('www.aliyundrive.com'));

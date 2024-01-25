@@ -33,27 +33,29 @@
       </div>
     </div>
     <div class="list-content">
-      <div class="item-list">
-        <a-badge-ribbon v-for="(item, i) of movieList" :text="item.rating.value" :key="item.id">
-          <a-card class="movie-item" hoverable @click="handleClickCard(item)">
-            <template #cover>
-              <img class="movie-pic" :alt="item.title" :src="item.pic.normal" referrerpolicy="no-referrer" />
-              <div class="tag-box">
-                <a-space wrap>
-                  <a-tag class="movie-tag" v-for="(tag, iTag) of getSplitTags(item.card_subtitle)" color="orange" :key="tag">{{ tag }}</a-tag>
-                </a-space>
-              </div>
-            </template>
-            <a-card-meta :title="item.title">
-              <template #description>
-                <p class="movie-comment">
-                  {{ item.comment }}
-                </p>
+      <a-spin :spinning="loading">
+        <div class="item-list">
+          <a-badge-ribbon v-for="(item, i) of movieList" :text="item.rating.value" :key="item.id">
+            <a-card class="movie-item" hoverable @click="handleClickCard(item)">
+              <template #cover>
+                <img class="movie-pic" :alt="item.title" :src="item.pic.normal" referrerpolicy="no-referrer" />
+                <div class="tag-box">
+                  <a-space wrap>
+                    <a-tag class="movie-tag" v-for="(tag, iTag) of getSplitTags(item.card_subtitle)" color="orange" :key="tag">{{ tag }}</a-tag>
+                  </a-space>
+                </div>
               </template>
-            </a-card-meta>
-          </a-card>
-        </a-badge-ribbon>
-      </div>
+              <a-card-meta :title="item.title">
+                <template #description>
+                  <p class="movie-comment">
+                    {{ item.comment }}
+                  </p>
+                </template>
+              </a-card-meta>
+            </a-card>
+          </a-badge-ribbon>
+        </div>
+      </a-spin>
     </div>
   </div>
 </template>
@@ -147,8 +149,12 @@ const getSplitTags = (tagString) => {
     .map((item) => item.trim());
 };
 
+const loading = ref(false);
+
 const handleFetchData = async (key, query) => {
+  loading.value = true;
   const { data } = await useFetch('/api/movie_list', { query: { key, q: query } });
+  loading.value = false;
   if (data.value && data.value.status === 'success') {
     return data.value.data;
   }
@@ -171,6 +177,7 @@ const handleClickCard = (item) => {
 }
 
 .item-list {
+  min-height: calc(100vh - 408px);
   width: 1200px;
   margin: 12px auto;
   display: flex;

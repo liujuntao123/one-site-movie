@@ -9,23 +9,25 @@
         </div>
       </div>
       <div class="select-list-content">
-        <div class="video-select-list">
-          <div class="flag-list">
-            <a-radio-group v-model:value="currentFlag" button-style="solid">
-              <a-radio-button v-for="(flag, i) of flagList" :key="flag" :value="flag">{{ flag }}</a-radio-button>
-            </a-radio-group>
+        <a-spin :spinning="loading" style="min-height: 800px">
+          <div class="video-select-list">
+            <div class="flag-list">
+              <a-radio-group v-model:value="currentFlag" button-style="solid">
+                <a-radio-button v-for="(flag, i) of flagList" :key="flag" :value="flag">{{ flag }}</a-radio-button>
+              </a-radio-group>
+            </div>
+            <a-divider></a-divider>
+            <div class="video-list">
+              <a-radio-group v-model:value="selectedItemUrl">
+                <a-space wrap>
+                  <a-radio-button width="200px" @click="handlePlay(card.url)" v-for="(card, i) of videoList" :key="card.url" :value="card.url">
+                    {{ card.name }}
+                  </a-radio-button>
+                </a-space>
+              </a-radio-group>
+            </div>
           </div>
-          <a-divider></a-divider>
-          <div class="video-list">
-            <a-radio-group v-model:value="selectedItemUrl">
-              <a-space wrap>
-                <a-radio-button width="200px" @click="handlePlay(card.url)" v-for="(card, i) of videoList" :key="card.url" :value="card.url">
-                  {{ card.name }}
-                </a-radio-button>
-              </a-space>
-            </a-radio-group>
-          </div>
-        </div>
+        </a-spin>
       </div>
     </div>
   </div>
@@ -49,9 +51,12 @@ const flagList = ref([]);
 const vodName = ref('');
 const vodPic = ref('');
 const vodRemarks = ref('');
+const loading = ref(false);
 const getPlayData = async () => {
   const id = route.query.id;
+  loading.value = true;
   const { data } = await useFetchWithToken('/api/detail', { query: { id: id } });
+  loading.value = false;
   if (data.value.status !== 'success') {
     message.error('获取视频资源信息失败，请选择别的资源');
     return;
