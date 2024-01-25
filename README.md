@@ -4,6 +4,10 @@
 
 界面清爽，完全免费的在线观影网站。
 
+体验地址：https://one-site-movie.fun
+
+网站截图
+
 ![image](https://github.com/liujuntao123/one-site-movie/assets/22583601/22b742e0-7b19-4a94-92a7-6a3b1f4ff0fd)
 
 
