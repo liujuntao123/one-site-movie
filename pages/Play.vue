@@ -3,10 +3,12 @@
     <subtitle :subtitle="vodName"></subtitle>
     <div class="play-container">
       <div class="play-content">
-        <div class="player-box">
-          <div style="height: 720px" id="dplayer" referrerpolicy="no-referrer"></div>
-          <a-alert style="margin-top: 12px" message="如果出现视频只有声音画面黑屏的情况，表示此浏览器不支持该视频编码,以下方法二选一：1.切换支持硬解码功能的浏览器，如chrome。2.切换除原画以外的清晰度。" type="warning" />
-        </div>
+        <a-spin :spinning="loadingPlayData" style="min-height: 811px">
+          <div class="player-box">
+            <div style="height: 720px" id="dplayer" referrerpolicy="no-referrer"></div>
+            <a-alert style="margin-top: 12px" message="如果出现视频只有声音画面黑屏的情况，表示此浏览器不支持该视频编码,以下方法二选一：1.切换支持硬解码功能的浏览器，如chrome。2.切换除原画以外的清晰度。" type="warning" />
+          </div>
+        </a-spin>
       </div>
       <div class="select-list-content">
         <a-spin :spinning="loading" style="min-height: 800px">
@@ -35,8 +37,8 @@
 
 <script setup>
 import { watch } from 'vue';
-import DPlayer from 'dplayer';
 import Hls from 'hls.js';
+import DPlayer from 'dplayer';
 
 let dp = null;
 
@@ -85,8 +87,9 @@ const getPlayData = async () => {
   flagList.value = flagListValue;
   currentFlag.value = flagListValue[0];
   videoList.value = allVideoList.value[currentFlag.value];
+  selectedItemUrl.value = videoList.value[0].url;
   readHistory();
-  // handlePlay(videoList.value[0].url)
+  handlePlay(selectedItemUrl.value);
 };
 
 watch(currentFlag, () => {
@@ -102,7 +105,6 @@ const initPlayer = (url) => {
     screenshot: true,
     hotkey: true,
     preload: 'auto',
-    logo: 'logo.png',
     volume: 0.7,
     mutex: true,
     video: {
@@ -126,7 +128,6 @@ onMounted(() => {
 
 const addListener = () => {
   window.addEventListener('beforeunload', (event) => {
-    alert('离开事件');
     saveHistory();
   });
 };
@@ -135,11 +136,6 @@ const addListener = () => {
 onBeforeRouteLeave((to, from) => {
   saveHistory();
 });
-
-// // 组件销毁后解绑window事件
-// onUnmounted(() => {
-//   window.removeEventListener('beforeunload', saveHistory);
-// });
 
 const saveHistory = () => {
   if (dp) {
@@ -182,7 +178,9 @@ const readHistory = () => {
   }
 };
 
+const loadingPlayData = ref(false);
 const handlePlay = async (url) => {
+  loadingPlayData.value = true;
   const { data } = await useFetchWithToken('/api/play', {
     query: {
       flag: currentFlag.value,
@@ -190,6 +188,7 @@ const handlePlay = async (url) => {
       share_id: route.query.id,
     },
   });
+  loadingPlayData.value = false;
 
   if (data.value.status !== 'success') {
     message.error('播放失败，请稍后再试');

@@ -38,12 +38,12 @@ export const jsonParse = (jsonString) => {
 export const store = {
   set: async (path1, path2, val) => {
     const res = await kv.set(`${path1}/${path2}`, val);
-    console.log('🚀 ~ set: ~ res:', '存储成功', res);
+    // console.log('🚀 ~ set: ~ res:', '存储成功', res);
     return res;
   },
   get: async (path1, path2) => {
     const res = await kv.get(`${path1}/${path2}`);
-    console.log('🚀 ~ get: ~ res:', '获取成功', res);
+    // console.log('🚀 ~ get: ~ res:', '获取成功', res);
     return res;
   },
 };
