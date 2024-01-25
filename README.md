@@ -28,4 +28,6 @@
 
   1. fork 本项目
   2. 在vercel选择fork的仓库进行一键部署
-  3. 新建一个database项目，选择vercel kv类型的数据
+  3. 在vercel创建一个database类型的项目，选择vercel kv类型的数据
+  4. 根据指引进行database和project的关联
+  5. 完成
