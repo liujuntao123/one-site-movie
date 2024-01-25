@@ -1,25 +1,12 @@
 <template>
   <div class="detail-container">
+    <subtitle subtitle="影片搜索"></subtitle>
     <div class="main-content">
       <div class="banner">
         <SearchComp v-model:value="keywords" @onSearch="onSearch" />
       </div>
       <div>
-        <div class="search-content">
-          <div class="search-content-header">
-            <h1>资源列表</h1>
-          </div>
-          <div class="movie-item-list">
-            <a-card @click="handleNavToDetail(item)" class="movie-item" v-for="(item, i) of movieList" :key="item.vod_id" hoverable>
-              <template #cover>
-                <img :alt="item.vod_name" :src="item.vod_pic" />
-              </template>
-              <a-card-meta :title="item.vod_name">
-                <template #description>{{ item.vod_remarks }}</template>
-              </a-card-meta>
-            </a-card>
-          </div>
-        </div>
+        <search-content :movieList="movieList"></search-content>
       </div>
     </div>
   </div>
@@ -52,15 +39,6 @@ const handleFetchData = async () => {
     message.error('搜索失败，请检查关键字是否正确');
   }
 };
-
-const handleNavToDetail = async (val) => {
-  router.push({
-    path: '/play',
-    query: {
-      id: val.vod_id,
-    },
-  });
-};
 </script>
 
 <style lang="less" scoped>
@@ -80,7 +58,6 @@ const handleNavToDetail = async (val) => {
   margin: 0 auto;
   margin-top: 20px;
   padding: 20px;
-  // background: #fff;
   h1 {
     margin-top: 0;
   }

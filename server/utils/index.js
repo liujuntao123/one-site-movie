@@ -37,13 +37,11 @@ export const jsonParse = (jsonString) => {
 
 export const store = {
   set: async (path1, path2, val) => {
-    if (!kv) return null;
     const res = await kv.set(`${path1}/${path2}`, val);
     console.log('🚀 ~ set: ~ res:', '存储成功');
     return res;
   },
   get: async (path1, path2) => {
-    if (!kv) return null;
     const res = await kv.get(`${path1}/${path2}`);
     console.log('🚀 ~ get: ~ res:', '获取成功');
     return res;

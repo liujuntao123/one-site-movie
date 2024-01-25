@@ -1,5 +1,6 @@
 <template>
   <div class="detail-container">
+    <subtitle subtitle="影片详情"></subtitle>
     <div class="main-content">
       <div class="info-content">
         <div class="pic">
@@ -13,19 +14,7 @@
           </a-descriptions>
         </div>
       </div>
-      <div class="search-content">
-        <h1>资源列表</h1>
-        <div class="movie-item-list">
-          <a-card @click="handleNavToDetail(item)" class="movie-item" v-for="(item, i) of movieList" hoverable :key="item.vod_id">
-            <template #cover>
-              <img :alt="item.vod_name" :src="item.vod_pic" />
-            </template>
-            <a-card-meta :title="item.vod_name">
-              <template #description>{{ item.vod_remarks }}</template>
-            </a-card-meta>
-          </a-card>
-        </div>
-      </div>
+      <search-content :movieList="movieList"></search-content>
     </div>
   </div>
 </template>
@@ -42,49 +31,12 @@ onMounted(async () => {
 });
 
 const handleFetchData = async () => {
-  const { data } = await useFetch('/api/search', { query: { keywords: query.value.title } });
-
+  const { data } = await useFetchWithEngine('/api/search', { query: { keywords: query.value.title } });
   if (data.value && data.value.status === 'success') {
     movieList.value = data.value.data.list;
-    console.log(movieList.value);
+  } else {
+    message.error('获取数据失败');
   }
-};
-
-const checkResource = async () => {};
-
-const getPlayData = async () => {
-  const id = route.query.id;
-  const { data } = await useFetch('/api/detail', { query: { id: id } });
-  const result = data.value.data.list[0];
-  const flagListValue = result.vod_play_from.split('$$$');
-  const allVideoListValue = {};
-
-  const urlArray = result.vod_play_url.split('$$$');
-
-  flagListValue.forEach((item, i) => {
-    const urlStr = urlArray[i];
-    const videoItemArr = urlStr.split('#').map((it) => {
-      return {
-        name: it.split('$')[0],
-        url: it.split('$')[1],
-      };
-    });
-    allVideoListValue[item] = videoItemArr;
-  });
-
-  allVideoList.value = allVideoListValue;
-  flagList.value = flagListValue;
-  currentFlag.value = flagListValue[0];
-  videoList.value = allVideoList.value[currentFlag.value];
-};
-
-const handleNavToDetail = async (val) => {
-  router.push({
-    path: '/play',
-    query: {
-      id: val.vod_id,
-    },
-  });
 };
 </script>
 
@@ -110,21 +62,25 @@ const handleNavToDetail = async (val) => {
 }
 
 .search-content {
+  width: 1200px;
+  margin: 0 auto;
   margin-top: 20px;
-  padding: 20px;
-  background: #fff;
+  // padding: 20px;
+  h1 {
+    margin-top: 0;
+  }
   .movie-item-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 16px;
   }
 }
 
 .movie-item {
-  width: 154px;
+  width: 184px;
   padding: 12px;
   img {
-    height: 140px;
+    height: 200px;
   }
 }
 

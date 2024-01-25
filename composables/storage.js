@@ -5,7 +5,7 @@ export const setLocalStrorage = (key, value) => {
       value = JSON.stringify(value);
     }
     window.localStorage.setItem(key, value);
-    console.log('localStorage设置成功');
+    console.log(`${key} local storage 设置成功`);
   }
 };
 

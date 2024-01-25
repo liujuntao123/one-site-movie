@@ -68,6 +68,9 @@ const movieList = ref([]);
 const categoryValue = ref('');
 onMounted(() => {
   categoryValue.value = 'hot';
+  if (!getLocalstorage('engine')) {
+    setLocalStrorage('engine', 'pansearch');
+  }
 });
 const movieTagValues = reactive(['全部形式', '全部地区', '全部类型', '全部年代']);
 const subCategoryVisible = ref(true);

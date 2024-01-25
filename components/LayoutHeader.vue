@@ -8,6 +8,7 @@
       </div>
     </div>
     <div class="right">
+      <a-button type="text" @click="$router.push('/history')">观看历史</a-button>
       <a-button type="text" @click="handleGoSetting">设置</a-button>
     </div>
   </div>

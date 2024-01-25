@@ -26,6 +26,7 @@
     "vue-router": "^4.2.5"
   },
   "dependencies": {
+    "@vercel/kv": "^1.0.1",
     "dplayer": "^1.27.1",
     "hls.js": "^1.5.1",
     "xgplayer": "^3.0.11",

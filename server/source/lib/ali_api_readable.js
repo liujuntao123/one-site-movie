@@ -75,7 +75,7 @@ class User {
   }
   
   async save() {
-    return await storage.set(this.getRefreshToken(), 'aliyundrive_user', this.toString()), this;
+    return await store.set(this.getRefreshToken(), 'aliyundrive_user', this.toString()), this;
   }
 
   toString() {
@@ -131,7 +131,7 @@ class OAuth {
   }
 
   async save() {
-    await storage.set(this.getRefreshToken(), 'aliyundrive_oauth', this.toString());
+    await store.set(this.getRefreshToken(), 'aliyundrive_oauth', this.toString());
     return this;
   }
 
@@ -269,12 +269,12 @@ let user = new User();
 let log = c['log'];
 
 async function getUserCache() {
-  const cache = await storage.get(user.getRefreshToken(), 'aliyundrive_user');
+  const cache = await store.get(user.getRefreshToken(), 'aliyundrive_user');
   return cache;
 }
 
 async function getOAuthCache() {
-  const cache = await storage.get(oauth.getRefreshToken(), 'aliyundrive_oauth');
+  const cache = await store.get(oauth.getRefreshToken(), 'aliyundrive_oauth');
   return cache;
 }
 

@@ -1,9 +1,10 @@
 <template>
   <div>
+    <subtitle :subtitle="vodName"></subtitle>
     <div class="play-container">
       <div class="play-content">
         <div class="player-box">
-          <div id="dplayer" referrerpolicy="no-referrer"></div>
+          <div style="height: 720px" id="dplayer" referrerpolicy="no-referrer"></div>
           <a-alert style="margin-top: 12px" message="如果出现视频只有声音画面黑屏的情况，表示此浏览器不支持该视频编码,以下方法二选一：1.切换支持硬解码功能的浏览器，如chrome。2.切换除原画以外的清晰度。" type="warning" />
         </div>
       </div>
@@ -45,6 +46,9 @@ const selectedItemUrl = ref('');
 const videoList = ref([]);
 const currentFlag = ref('');
 const flagList = ref([]);
+const vodName = ref('');
+const vodPic = ref('');
+const vodRemarks = ref('');
 const getPlayData = async () => {
   const id = route.query.id;
   const { data } = await useFetchWithToken('/api/detail', { query: { id: id } });
@@ -53,6 +57,9 @@ const getPlayData = async () => {
     return;
   }
   const result = data.value.data.list[0];
+  vodName.value = result.vod_name;
+  vodPic.value = result.vod_pic;
+  vodRemarks.value = result.vod_remarks;
   const flagListValue = result.vod_play_from.split('$$$');
   const allVideoListValue = {};
 
@@ -73,6 +80,7 @@ const getPlayData = async () => {
   flagList.value = flagListValue;
   currentFlag.value = flagListValue[0];
   videoList.value = allVideoList.value[currentFlag.value];
+  readHistory();
   // handlePlay(videoList.value[0].url)
 };
 
@@ -108,8 +116,66 @@ const initPlayer = (url) => {
 
 onMounted(() => {
   getPlayData();
-  // initPlayer();
+  addListener();
 });
+
+const addListener = () => {
+  window.addEventListener('beforeunload', (event) => {
+    alert('离开事件');
+    saveHistory();
+  });
+};
+
+// 设置路由离开事件
+onBeforeRouteLeave((to, from) => {
+  saveHistory();
+});
+
+// // 组件销毁后解绑window事件
+// onUnmounted(() => {
+//   window.removeEventListener('beforeunload', saveHistory);
+// });
+
+const saveHistory = () => {
+  if (dp) {
+    const currentVodId = route.query.id;
+    const currentVodName = vodName.value;
+    const currentFlagValue = currentFlag.value;
+    const currentSelectedUrl = selectedItemUrl.value;
+    // 获取视频的播放进度
+    const currentProgress = dp.video.currentTime;
+
+    const history = JSON.parse(getLocalstorage('history') || '[]');
+    const index = history.findIndex((item) => item.vodId === currentVodId);
+    if (index !== -1) {
+      history.splice(index, 1);
+    }
+    history.unshift({
+      vodId: currentVodId,
+      vodName: currentVodName,
+      flag: currentFlagValue,
+      selectedUrl: currentSelectedUrl,
+      progress: currentProgress,
+      vodPic: vodPic.value,
+      vodRemarks: vodRemarks.value,
+    });
+    setLocalStrorage('history', JSON.stringify(history.slice(0, 10)));
+  }
+};
+
+const currentVideoProgress = ref(0);
+
+const readHistory = () => {
+  const historys = JSON.parse(getLocalstorage('history') || '[]');
+  const history = historys.find((item) => item.vodId === route.query.id);
+  if (history) {
+    currentFlag.value = history.flag;
+    selectedItemUrl.value = history.selectedUrl;
+    vodName.value = history.vodName;
+    currentVideoProgress.value = history.progress;
+    handlePlay(selectedItemUrl.value);
+  }
+};
 
 const handlePlay = async (url) => {
   const { data } = await useFetchWithToken('/api/play', {
@@ -126,6 +192,7 @@ const handlePlay = async (url) => {
   }
 
   const videoUrl = data.value.data.url;
+
   if (!dp) {
     initPlayer(videoUrl);
   } else {
@@ -141,6 +208,7 @@ const handlePlay = async (url) => {
       },
     });
   }
+  dp.seek(currentVideoProgress.value);
 };
 </script>
 
@@ -159,7 +227,7 @@ const handlePlay = async (url) => {
     background: #fff;
   }
   .player-box {
-    height: 720px;
+    // height: 740px;
     flex: 1;
     background: #fff;
   }
