@@ -1,5 +1,6 @@
 <template>
   <div>
+    <subtitle subtitle="设置"></subtitle>
     <div class="setting-container">
       <h2>设置</h2>
       <a-divider></a-divider>
