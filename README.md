@@ -1,6 +1,15 @@
+声明：本项目仅用于学习交流，不用于商业用途。如果存在侵权问题，请联系作者删除。
+
 # 一站影视
 
 界面清爽，完全免费的在线观影网站。
+
+体验地址：https://one-site-movie.fun
+
+网站截图
+
+![image](https://github.com/liujuntao123/one-site-movie/assets/22583601/22b742e0-7b19-4a94-92a7-6a3b1f4ff0fd)
+
 
 ## 如何使用
 1. 拥有一个阿里云盘账号
@@ -20,4 +29,12 @@
 - 收藏 
 - 分享链接解析 
 - 阿里云盘扫码获得token 
-- 移动端适配 
+- 移动端适配
+
+## 如何自己部署一个此网站？（以下都是免费的）
+
+  1. fork 本项目
+  2. 在vercel选择fork的仓库进行一键部署
+  3. 在vercel创建一个database类型的项目，选择vercel kv类型的数据
+  4. 根据指引进行database和project的关联
+  5. 完成
