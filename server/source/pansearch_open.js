@@ -67,7 +67,7 @@ async function play(flag, id, flags) {
 
 async function search(wd, quick, pg) {
   if (pg <= 0) pg = 1;
-  const limit = 10;
+  const limit = 20;
   let offsetParam = '';
   const offset = (pg - 1) * limit;
   if (offset > 0) {

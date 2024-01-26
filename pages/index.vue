@@ -55,6 +55,9 @@
             </a-card>
           </a-badge-ribbon>
         </div>
+        <div class="pagination-container">
+          <a-pagination v-model:current="currentPage" v-model:pageSize="pageSize" show-quick-jumper :total="total" @change="onPageChange" />
+        </div>
       </a-spin>
     </div>
   </div>
@@ -66,6 +69,22 @@ const router = useRouter();
 
 const keywords = ref('');
 const movieList = ref([]);
+
+const currentPage = ref(1);
+const onPageChange = (page) => {
+  currentPage.value = page;
+};
+const total = ref(0);
+const pageSize = ref(20);
+
+watch(currentPage, () => {
+  fetchDataBySubCategory();
+});
+
+watch(pageSize, () => {
+  currentPage.value = 1;
+  fetchDataBySubCategory();
+});
 
 const categoryValue = ref('');
 onMounted(() => {
@@ -153,9 +172,10 @@ const loading = ref(false);
 
 const handleFetchData = async (key, query) => {
   loading.value = true;
-  const { data } = await useFetch('/api/movie_list', { query: { key, q: query } });
+  const { data } = await useFetch('/api/movie_list', { query: { key, q: query, start: (currentPage.value - 1) * pageSize.value, count: pageSize.value } });
   loading.value = false;
   if (data.value && data.value.status === 'success') {
+    total.value = data.value.data.total;
     return data.value.data;
   }
 };
@@ -234,5 +254,12 @@ const handleClickCard = (item) => {
 
 .filter-items {
   padding: 12px;
+}
+
+.pagination-container {
+  width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row-reverse;
 }
 </style>

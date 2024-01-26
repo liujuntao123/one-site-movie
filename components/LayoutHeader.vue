@@ -8,6 +8,12 @@
       </div>
     </div>
     <div class="right">
+      <a-button type="text">
+        <a href="https://github.com/liujuntao123/one-site-movie">
+          <GithubOutlined />
+          github
+        </a>
+      </a-button>
       <a-button type="text" @click="$router.push('/history')">观看历史</a-button>
       <a-button type="text" @click="handleGoSetting">设置</a-button>
     </div>

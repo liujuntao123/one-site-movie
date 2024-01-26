@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
   let commonQueryKey = query.key;
 
   const queryObj = common_query[commonQueryKey];
-  const queryString = objectToQueryString({ ...queryObj, q: query.q });
+  const queryString = objectToQueryString({ ...queryObj, q: query.q, start: query.start, count: query.count });
   const res = await $fetch(`${url}?${queryString}`, {
     method: 'GET',
     headers: { ...common_header },
